@@ -1,0 +1,27 @@
+# --- Evidence & Output ---
+# Ignore the actual forensic data collected
+Output/
+Triage_*/
+MemDump_*/
+*.tar.gz
+*.zip
+*.lime
+*.lime.gz
+*.vhdx
+*.csv
+*.xlsx
+*.jsonl
+*.html
+*.log
+
+# --- Tools ---
+# Do not upload the binary tools (EZTools, Hindsight, avml)
+# Users should download these themselves to ensure they are clean/up-to-date
+Bin/
+
+# --- Temporary/System ---
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+hindsight-temp/
