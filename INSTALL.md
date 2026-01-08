@@ -202,8 +202,8 @@ Chimera/
 ---
 
 # Full Setup Guide for Chimera
-
-Chimera requires PowerShell 5.1+ and external tools: Eric Zimmerman's EZTools suite, Microsoft's AVML, and Hindsight. Place them in the `Tools/` directory.
+Chimera requires PowerShell 5.1+ and external tools: Eric Zimmerman's EZTools suite, Microsoft's AVML, and Hindsight. 
+Place them in the `Tools/` directory.
 
 ## Step-by-Step Setup
 1. **Clone the Repository**
@@ -215,13 +215,13 @@ Create a `Tools/` folder if it doesn't exist.
 ```powershell
 .\Initialize-Chimera.ps1
 
-Download the latest versions and verify integrity (use SHA256 hashes from official sources where provided).
+Download the latest versions and verify their integrity (use SHA256 hashes from official sources when available).
 - **Eric Zimmerman's EZTools** (for parsing Amcache, Shimcache, Registry):
   - Official site: https://ericzimmerman.github.io
   - Recommended: Use the Get-ZimmermanTools.ps1 script to download the full suite.
     - Download script: https://raw.githubusercontent.com/EricZimmerman/Get-ZimmermanTools/master/Get-ZimmermanTools.ps1
     - Run: `.\Get-ZimmermanTools.ps1 -Dest .\Tools\Windows\EZTools`
-    - This auto-downloads latest binaries (e.g., AmCacheParser.exe, AppCompatCacheParser.exe, RECmd.exe).
+    - This auto-downloads the latest binaries (e.g., AmCacheParser.exe, AppCompatCacheParser.exe, RECmd.exe).
   - Verification: The script supports `--operation Validate` with hashes from VERSION files. Run it to check.
   - Required tools: At minimum, download AmCacheParser, AppCompatCacheParser, and RECmd for Chimera's parsing.
   - Latest as of Jan 2026: Check https://github.com/EricZimmerman (individual tool repos) for updates; hashes often in release notes.
@@ -241,27 +241,31 @@ Download the latest versions and verify integrity (use SHA256 hashes from offici
   - Place in `Tools/Windows/Hindsight/`.
 
 3. **Unblock PowerShell Scripts**
-
-## ❓ Troubleshooting
-
-### ❌ "Script is not digitally signed"
-Your Execution Policy is restricting the script.
-Run this command:
 ```powershell
-Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
-```
+Get-ChildItem -Path . -Recurse -Filter *.ps1 | Unblock-File
 
-### ❌ "KAPE not found"
-Double-check your path. It should be `Tools\Windows\KAPE\kape.exe`. 
-Avoid nested folders like `KAPE\KAPE\kape.exe`.
+4. **Run the Launcher**
+```powershell
+.\Chimera.ps1
+Select modules from the menu based on the objective.
 
-### ❌ "Access Denied" on output folders
-Ensure you are running PowerShell as **Administrator**. 
-Shadow Copy (VSS) operations require high privileges.
+## Troubleshooting
+- **Execution Policy Errors**: If scripts won't run, set policy: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`. Reset after use.
+- **SSH Setup for Linux**: Ensure OpenSSH is installed on your Windows host (via Settings > Apps > Optional Features).
+    Test connection: `ssh user@host`. Use key-based auth for security—generate with `ssh-keygen` and copy to the target.
+- **Other Linux SSH Errors: Ensure the **OpenSSH Client** is installed on your Windows host:
+    Settings > Apps > Optional Features > Add a feature > OpenSSH Client*
+- **Tool Not Found**: Verify paths in `Config/ChimeraConfig.ps1`. If a tool fails, check its executable and that it is in `Tools/`.
+    Double-check your path. It should be `Tools\Windows\KAPE\kape.exe`. 
+    Avoid nested folders like `KAPE\KAPE\kape.exe`.
+- **VSS Access Denied (Windows)**: Run as Admin. Ensure Volume Shadow Copy service is enabled: `services.msc > Volume Shadow Copy > Start`.
+- **Access Denied on output folders
+    Ensure you are running PowerShell as **Administrator**. 
+    Shadow Copy (VSS) operations require high privileges.
+- **Memory Acquisition Fails (Linux)**: Target kernel must not have lockdown enabled. Use `--debug` in modules for logs.
+- **Dependencies Missing**: Chimera is agent-less, but targets need basic utils (e.g., gzip on Linux).
 
-### ❌ Linux SSH Errors
-Ensure the **OpenSSH Client** is installed on your Windows host:
-*Settings > Apps > Optional Features > Add a feature > OpenSSH Client*
+*For issues, open a GitHub Issue with logs.*
 
 ---
 
