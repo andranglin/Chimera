@@ -58,10 +58,16 @@ Chimera requires external third-party tools (EZTools, AVML, Hindsight) to functi
     ```powershell
     Get-ChildItem -Recurse | Unblock-File
     ```
-3.  **Run the Launcher**:
+3. **Initialize Chimera** (This creates the Tools folder and support subfolders)
+```powershell
+.\Initialize-Chimera.ps1
+ ```
+4. **Tools and Dependencies** Download and add the respective binary dependencies to the appropriate folder/subfolder 
+5.  **Run the Launcher**:
     ```powershell
     .\Chimera.ps1
     ```
+6. **Collect Windows artifacts** Select the appropriate option from the Chimera Menu option
 
 ---
 
