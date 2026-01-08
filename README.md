@@ -4,7 +4,7 @@
 
 **Chimera** is a modular, agent-less forensic triage framework designed for Incident Response (IR) teams. It bridges the gap between fast "Live Response" and deep-dive forensics by orchestrating industry-standard tools (EZTools, AVML, Hindsight) via PowerShell and SSH.
 
-> **Note:** This tool is designed for authorized forensic acquisition only.
+> **Note:** This tool is designed for authorised forensic acquisition only.
 
 ---
 
@@ -25,7 +25,7 @@ Chimera is part of the **RootGuard** ecosystem. For detailed usage instructions,
 
 ### 🐧 Linux Forensics
 * **Zero-Footprint Triage:** Pushes a static payload via SSH, executes via RAM/Tmp, and cleans up traces automatically.
-* **"The Goat" Engine:** A hybrid collection script combining **RCSIRT** and **Cat-Scale** methodologies for deep artifact hunting (Web Shells, Rootkits, User History, Docker, Databases).
+* **"The Goat" Engine:** A hybrid collection script combining methodologies for deep artifact hunting (Web Shells, Rootkits, User History, Docker, Databases).
 * **Memory Acquisition:** Streamlined RAM capture using Microsoft's *AVML* with on-the-fly compression to minimize transfer time.
 
 ---
@@ -36,7 +36,7 @@ Beyond this tool, **RootGuard** provides a comprehensive learning hub for Digita
 
 * **Linux Forensics:** Deep dives into `/proc` analysis, inode anomaly detection, and persistence hunting.
 * **Windows Artifacts:** Understanding ShimCache, Amcache, and SRUM for evidence of execution.
-* **Memory Forensics:** Methodologies for acquiring and analyzing volatile memory.
+* **Memory Forensics:** Methodologies for acquiring and analysing volatile memory.
 * **Incident Response Playbooks:** Structured workflows for handling Ransomware, BEC, and Web Shell incidents.
 
 [**Explore the Knowledge Base**](https://rootguard.gitbook.io/cyberops)
