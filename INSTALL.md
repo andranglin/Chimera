@@ -36,15 +36,13 @@ Chimera is a modular PowerShell framework designed for Incident Response. While 
 
 ### 1. Clone the Repository
 Download the scripts to your analysis machine or a secure triage USB drive.
-
 ```powershell
-git clone https://github.com/YOUR_USERNAME/Chimera.git
+git clone https://github.com/andranglin/Chimera.git
 cd Chimera
 ```
 
 ### 2. Unblock Scripts
 Windows blocks downloaded scripts by default. Run this one-liner in an **Admin PowerShell** terminal to unblock the suite:
-
 ```powershell
 Get-ChildItem -Recurse | Unblock-File
 ```
@@ -136,6 +134,7 @@ Ensure your file tree looks **exactly** like this. The scripts depend on these s
 Chimera/
 │
 ├── Chimera.ps1                       # Main Menu Launcher
+├── Initialize-Chimera.ps1
 ├── README.md
 ├── INSTALL.md
 ├── .gitignore
@@ -164,7 +163,7 @@ Chimera/
     │   ├── EZTools/                  # [Folder containing RECmd.exe, etc.]
     │   ├── Hindsight/                # [Folder containing hindsight.exe]
     │   ├── KAPE/                     # [Folder containing kape.exe]
-    │   └── Memory/                   # [Folder containing DumpIt.exe]
+    │   └── Memory/                   # [Folder containing DumpIt.exe, MagnetRAMCapture]
     │
     └── Linux/
         ├── avml                      # [Binary File]
@@ -202,19 +201,63 @@ Chimera/
 
 ---
 
+# Full Setup Guide for Chimera
+
+Chimera requires PowerShell 5.1+ and external tools: Eric Zimmerman's EZTools suite, Microsoft's AVML, and Hindsight. Place them in the `Tools/` directory.
+
+## Step-by-Step Setup
+1. **Clone the Repository**
+   git clone https://github.com/andranglin/Chimera.git
+   cd Chimera
+
+2. **Download and Verify External Tools**
+Create a `Tools/` folder if it doesn't exist.
+```powershell
+.\Initialize-Chimera.ps1
+
+Download the latest versions and verify integrity (use SHA256 hashes from official sources where provided).
+- **Eric Zimmerman's EZTools** (for parsing Amcache, Shimcache, Registry):
+  - Official site: https://ericzimmerman.github.io
+  - Recommended: Use the Get-ZimmermanTools.ps1 script to download the full suite.
+    - Download script: https://raw.githubusercontent.com/EricZimmerman/Get-ZimmermanTools/master/Get-ZimmermanTools.ps1
+    - Run: `.\Get-ZimmermanTools.ps1 -Dest .\Tools\Windows\EZTools`
+    - This auto-downloads latest binaries (e.g., AmCacheParser.exe, AppCompatCacheParser.exe, RECmd.exe).
+  - Verification: The script supports `--operation Validate` with hashes from VERSION files. Run it to check.
+  - Required tools: At minimum, download AmCacheParser, AppCompatCacheParser, and RECmd for Chimera's parsing.
+  - Latest as of Jan 2026: Check https://github.com/EricZimmerman (individual tool repos) for updates; hashes often in release notes.
+
+- **AVML** (for Linux memory acquisition):
+  - Official: https://github.com/microsoft/avml/releases/latest (v0.15.0 as of early 2026).
+  - Download: `avml-x86_64-unknown-linux-musl` (static binary for Linux targets).
+    - URL: https://github.com/microsoft/avml/releases/download/v0.15.0/avml-x86_64-unknown-linux-musl
+  - SHA256: Check the release page for a checksum file (e.g., SHA256SUMS). Example (verify latest): If not provided, compute locally with `Get-FileHash` in PowerShell.
+  - Place in `Tools/Linux/AVML/` and make executable if needed.
+
+- **Hindsight** (for browser forensics):
+  - Official: https://github.com/obsidianforensics/hindsight/releases/latest (v2025.03 as of early 2026).
+  - Download: `hindsight.exe` (Windows executable) or `hindsight_gui.exe` for GUI.
+    - URL: https://github.com/obsidianforensics/hindsight/releases/download/v2025.03/hindsight.exe (adjust for latest tag).
+  - SHA256: Check release assets or notes for checksums. If absent, compute manually.
+  - Place in `Tools/Windows/Hindsight/`.
+
+3. **Unblock PowerShell Scripts**
+
 ## ❓ Troubleshooting
 
 ### ❌ "Script is not digitally signed"
-Your Execution Policy is restricting the script. Run this command:
+Your Execution Policy is restricting the script.
+Run this command:
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 ```
 
 ### ❌ "KAPE not found"
-Double-check your path. It should be `Tools\Windows\KAPE\kape.exe`. Avoid nested folders like `KAPE\KAPE\kape.exe`.
+Double-check your path. It should be `Tools\Windows\KAPE\kape.exe`. 
+Avoid nested folders like `KAPE\KAPE\kape.exe`.
 
 ### ❌ "Access Denied" on output folders
-Ensure you are running PowerShell as **Administrator**. Shadow Copy (VSS) operations require high privileges.
+Ensure you are running PowerShell as **Administrator**. 
+Shadow Copy (VSS) operations require high privileges.
 
 ### ❌ Linux SSH Errors
 Ensure the **OpenSSH Client** is installed on your Windows host:
@@ -222,4 +265,4 @@ Ensure the **OpenSSH Client** is installed on your Windows host:
 
 ---
 
-*For educational and authorized forensic use only.*
+*For educational and authorised forensic use only.*
